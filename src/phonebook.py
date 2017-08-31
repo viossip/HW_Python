@@ -3,10 +3,11 @@ from contact import Contact, ProfessionalContact, FriendContact, ProfessionalFri
 
 contacts = []
 
+
 def addContact():
-    print("Should this contact be Simple (S), Friend (F), Professional (P) or Both (B)?\n"
-          "press (x) to exit.")
     while True:
+        print("Should this contact be Simple (S), Friend (F), Professional (P) or Both (B)?\n"
+              "press (x) to exit.")
         choice = input("--> ")
         if choice.lower() == 's':
             contacts.append(Contact())
@@ -19,7 +20,7 @@ def addContact():
         elif choice.lower() == 'x':
             return
         else:
-            errorMessage()
+            continue
         contacts.sort()
         return
 
@@ -36,38 +37,61 @@ def showContacts():
 
 
 def editContact():
-    print("Enter a valid number of the contact you wish to edit:")
-    while True:
-        try:
-            choice = int(input("--> "))
-            break
-        except ValueError:
-            errorMessage()
-
-    contactReplace = next((contact for contact in contacts if contact.contactNumber == choice), None)
-
-    if contactReplace:
-        print("Should this contact be Simple (S), Friend (F), Professional (P) or Both (B)? (x) for exit")
+    if contacts:
+        print("Enter a valid number of the contact you wish to edit:")
         while True:
-            choice = input("--> ")
-            print("For the following fields click enter if there's no change,"
-                  "a new value if you want to replace the field,"
-                  "or x if you want to delete the field (the name field cannot be deleted).")
-            if choice.lower() == 's':
-                contacts[contacts.index(contactReplace)] = Contact(contactReplace)
-            elif choice.lower() == 'f':
-                contacts[contacts.index(contactReplace)] = FriendContact(contactReplace)
-            elif choice.lower() == 'p':
-                contacts[contacts.index(contactReplace)] = ProfessionalContact(contactReplace)
-            elif choice.lower() == 'b':
-                contacts[contacts.index(contactReplace)] = ProfessionalFriendContact(contactReplace)
-            elif choice.lower() == 'x':
-                return
-            else:
+            try:
+                choice = int(input("--> "))
+                break
+            except ValueError:
                 errorMessage()
-            return
+
+        contactReplace = next((contact for contact in contacts if contact.contactNumber == choice), None)
+
+        if contactReplace:
+            print("Should this contact be Simple (S), Friend (F), Professional (P) or Both (B)? (x) for exit")
+            while True:
+                choice = input("--> ")
+                print("For the following fields click enter if there's no change,"
+                      "a new value if you want to replace the field,"
+                      "or x if you want to delete the field (the name field cannot be deleted).")
+                if choice.lower() == 's':
+                    contacts[contacts.index(contactReplace)] = Contact(contactReplace)
+                elif choice.lower() == 'f':
+                    contacts[contacts.index(contactReplace)] = FriendContact(contactReplace)
+                elif choice.lower() == 'p':
+                    contacts[contacts.index(contactReplace)] = ProfessionalContact(contactReplace)
+                elif choice.lower() == 'b':
+                    contacts[contacts.index(contactReplace)] = ProfessionalFriendContact(contactReplace)
+                elif choice.lower() == 'x':
+                    return
+                else:
+                    errorMessage()
+                contacts.sort()
+                return
+        else:
+            print("There is no contact with id: " + str(choice) + " in the phonebook!")
     else:
-        print("There is no contact with id: " + choice + " in the phonebook!")
+        print("There is no contacts in the phoneBook!\n")
+
+
+def deleteContact():
+    if contacts:
+        while True:
+            print("Enter a valid number of the contact you wish to delete:")
+            try:
+                contactID = int(input("--> "))
+                break
+            except ValueError:
+                errorMessage()
+
+        contactDelete = next((contact for contact in contacts if contact.contactNumber == contactID), None)
+        if contactDelete:
+            contacts.remove(contactDelete)
+        else:
+            print("There is no contact with id: " + str(contactID) + " in the phonebook!")
+    else:
+        print("There is no contacts in the phoneBook!\n")
 
 
 def start():
@@ -85,7 +109,7 @@ def start():
             elif choice == 4:
                 print(4)
             elif choice == 5:
-                print(5)
+                deleteContact()
             elif choice == 6:
                 print("\nGoodbye!")
                 quit(0)
