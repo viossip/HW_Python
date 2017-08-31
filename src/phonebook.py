@@ -25,15 +25,16 @@ def addContact():
         return
 
 
-def showContacts():
-    if contacts:
-        """for index, c in enumerate(contacts):
-            print("contact number " + (index+1).__str__() + ": ", end='')
-            print(c)"""
-        for c in contacts:
-            print("contact number " + str(c.contactNumber) + ": " + str(c))
+def showContacts(formFindMatches = None):
+    if not formFindMatches:
+        if contacts:
+            for c in contacts:
+                print("contact number " + str(c.contactNumber) + ": " + str(c))
+        else:
+            print("There is no contacts in the phoneBook!\n")
     else:
-        print("There is no contacts in the phoneBook!\n")
+        for c in formFindMatches:
+                print("contact number " + str(c.contactNumber) + ": " + str(c))
 
 
 def editContact():
@@ -75,6 +76,17 @@ def editContact():
         print("There is no contacts in the phoneBook!\n")
 
 
+def findContact():
+    print("Type contact details (name, phone, email):")
+    inputs = input("--> ").split(',')
+    for element in inputs:
+        matchContacts = [x for i, x in enumerate(contacts) if x.Match(element.strip())]
+        if matchContacts:
+            showContacts(matchContacts)
+        else:
+            print("There is no matches in the phone book!")
+
+
 def deleteContact():
     if contacts:
         while True:
@@ -107,7 +119,7 @@ def start():
             elif choice == 3:
                 editContact()
             elif choice == 4:
-                print(4)
+                findContact()
             elif choice == 5:
                 deleteContact()
             elif choice == 6:

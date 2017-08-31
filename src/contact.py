@@ -58,6 +58,13 @@ class Contact:
             cellphone = receiveValue(ValueType.phoneValue, "Cell Phone (" + olderContact.cellphone + "):")
             self.cellphone = cellphone if cellphone else olderContact.cellphone
 
+
+    def Match(self, matchStr):
+        for field in self.__dict__.keys():
+            if str(getattr(self, field, '')).find(matchStr) != -1:
+                return True
+        return False
+
 class FriendContact (Contact):
 
     def __init__(self, olderContact=None):
@@ -95,6 +102,9 @@ class FriendContact (Contact):
 
     def __lt__(self, other):
         return super().__lt__(other)
+
+    def Match(self, matchStr):
+        return super(FriendContact, self).Match(matchStr)
 
 
 class ProfessionalContact (Contact):
@@ -136,6 +146,9 @@ class ProfessionalContact (Contact):
             else:
                 self.workEmail = workEmail
 
+    def Match(self, matchStr):
+        return super(ProfessionalContact, self).Match(matchStr)
+
 
 class ProfessionalFriendContact (ProfessionalContact, FriendContact):
 
@@ -151,10 +164,14 @@ class ProfessionalFriendContact (ProfessionalContact, FriendContact):
     def ReadValues(self, olderContact):
         super(ProfessionalFriendContact, self).ReadValues(olderContact)
 
+    def Match(self, matchStr):
+        return super(ProfessionalFriendContact, self).Match(matchStr)
+
 
 #   The function receives value from user, by type of data.
-def receiveValue(typeVal, inputStr, enableEmptyName = False):
+def receiveValue(typeVal, inputStr, updateExisting = False):
     value = input(inputStr)
+
     if typeVal == ValueType.phoneValue:
         while not cellPhonePattern.match(value) and value:
             print(PHONE_ERROR)
@@ -164,9 +181,8 @@ def receiveValue(typeVal, inputStr, enableEmptyName = False):
             print(EMAIL_ERROR)
             value = input(inputStr)
     else:
-        if not enableEmptyName:
+        if not updateExisting:
             while not value:
                 print(NAME_ERROR)
                 value = input(inputStr)
-
     return value
