@@ -1,9 +1,12 @@
-#import contact
+#   Vitaly Osipenkov
+#   ID: 324716448
+
 from contact import Contact, ProfessionalContact, FriendContact, ProfessionalFriendContact
 
 contacts = []
 
 
+#   Adds a new contact into the phone book, by chosen type of contact.
 def addContact():
     while True:
         print("Should this contact be Simple (S), Friend (F), Professional (P) or Both (B)?\n"
@@ -25,6 +28,8 @@ def addContact():
         return
 
 
+#   The function prints all existing contacts from the phone book,
+#   Also can print lists of contacts from another funcs instead of the phone book - optional parameter.
 def showContacts(formFindMatches = None):
     if not formFindMatches:
         if contacts:
@@ -37,6 +42,7 @@ def showContacts(formFindMatches = None):
                 print("contact number " + str(c.contactNumber) + ": " + str(c))
 
 
+#   The function edits a contact by inserted number of contact if exists in the phone book.
 def editContact():
     if contacts:
         print("Enter a valid number of the contact you wish to edit:")
@@ -76,17 +82,19 @@ def editContact():
         print("There is no contacts in the phoneBook!\n")
 
 
+# The function generates a new list of contacts which match the given condition
 def findContact():
     print("Type contact details (name, phone, email):")
     inputs = input("--> ").split(',')
+    matchContacts = []
     for element in inputs:
-        matchContacts = [x for i, x in enumerate(contacts) if x.Match(element.strip())]
-        if matchContacts:
-            showContacts(matchContacts)
-        else:
-            print("There is no matches in the phone book!")
+        matchContacts.extend([x for i, x in enumerate(contacts) if x.Match(element.strip())])
+    if matchContacts:
+        showContacts(matchContacts)
+    else:
+        print("There is no matches in the phone book!")
 
-
+#   Delete contact after checking if exists in the phone book.
 def deleteContact():
     if contacts:
         while True:
@@ -106,6 +114,7 @@ def deleteContact():
         print("There is no contacts in the phoneBook!\n")
 
 
+#   The main function - displays the menu to user.
 def start():
     print("Welcome to the Phone Book!")
     while True:
@@ -130,6 +139,7 @@ def start():
         except ValueError:
             errorMessage()
 
+
 def menu():
     print("What would you like to do?\n"
           "1 - Add a new contact\n"
@@ -141,7 +151,10 @@ def menu():
     choice = input("--> ")
     return choice
 
+
+#   Displays to user error message, when inserted data values are invalid.
 def errorMessage():
     print("That is not a valid entry. Please try again.\n")
 
+#   The program starts here:
 start()
